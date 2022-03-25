@@ -9,6 +9,9 @@ rightWristY = 0;
 leftWristScore = 0;
 status_song1 = "";
 
+rightWristScore = 0;
+status_song2 = "";
+
 
 function preload()
 {
@@ -41,7 +44,8 @@ function gotPoses(results)
         
         console.log(results);
         leftWristScore = results[0].pose.keypoints[9].score;
-        console.log("Score Left Wrist = " + leftWristScore);
+        rightWristScore = results[0].pose.keypoints[10].score;
+        console.log("Score Left Wrist = " + leftWristScore + " Score Right Wrist = " + rightWristScore);
 
         leftWristX = results[0].pose.leftWrist.x;
         leftWristY = results[0].pose.leftWrist.y;
@@ -62,8 +66,20 @@ function draw()
     stroke('#FF0000');
 
     status_song1 = song1.isPlaying();
-    console.log(status_song1);
+    status_song2 = song2.isPlaying();
+    console.log("Song 1 = " + status_song1 + "Song 2 = " + status_song2);
 
+    if (rightWristScore > 0.2)
+    {
+        circle(rightWristX, rightWristY, 20);
+        song1.stop();
+
+        if (status_song2 == false)
+        {
+            song2.play();
+            document.getElementById("song").innerHTML = "Peter Pan";
+        }
+    }
 
     if (leftWristScore > 0.2)
     {
